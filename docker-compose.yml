@@ -1,37 +1,21 @@
-name: BUILD
-on:
-  push:
-    #tags:
-    #  - "*"
-    branches:
-    - feature/ci-test
+version: '3.1'
+services:
+  db:
+    image: mariadb:10.6
+    container_name: wordpress_mariadb
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=owncloud
+      - MYSQL_DATABASE=wordpressdb
+      - MYSQL_USER=wordpress
+      - MYSQL_PASSWORD=wordpress
+    command: ["--max-allowed-packet=128M", "--innodb-log-file-size=64M"]
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-u", "root", "--password=wordpress"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-env:
-  BUNDLER_VERSION: 1.17.3
-
-jobs:
-  docker-compose:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
-
-    - name: Set up Docker Compose
-      run: sudo apt-get update && sudo apt-get install -y docker-compose
-
-    - name: Run Docker Compose
-      run: |
-        docker-compose up
-        docker-compose ps
-    - name: Display Docker Compose logs
-      run: docker-compose logs
-
-    - name: Clean up Docker resources
-      if: always()
-      run: |
-        docker-compose down --rmi all --volumes --remove-orphans
-        docker system prune -a -f --volumes
+        #MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    #volumes:
+     # - db:/var/lib/mysql
