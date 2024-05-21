@@ -1,0 +1,18 @@
+# dockerfile1
+# Usa la imagen base de Ubuntu 18.04
+FROM ubuntu:18.04
+
+# Instalar dependencias necesarias
+RUN apt-get update && \
+    apt-get install -y curl gpg wget gcc make libssl-dev libreadline-dev zlib1g-dev
+
+# Crear y establecer permisos para el directorio de claves GPG
+RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import -
+
+# Fuente de scripts RVM y configuración de RVM para el shell
+#RUN /bin/bash -c "source /etc/profile.d/rvm.sh && rvm reload && rvm requirements"
+
+# Instalar Ruby y Rails
+#RUN /bin/bash -c "source /etc/profile.d/rvm.sh && rvm install ruby-1.9.3-p551 && rvm use ruby-1.9.3-p551 && gem install rails"
+
+RUN ls -la ./home
