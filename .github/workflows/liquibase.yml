@@ -1,0 +1,35 @@
+name: Liquibase Migrations
+
+on:
+  push:
+    branches:
+      - main  # o la rama que uses para tus despliegues
+  workflow_dispatch:
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+
+    #- name: Setup Liquibase
+    #  run: |
+    #    wget https://github.com/liquibase/liquibase/releases/download/v4.4.3/liquibase-4.4.3.tar.gz
+    #    tar -xzf liquibase-4.4.3.tar.gz
+
+    - name: Run Liquibase Migration
+      #env:
+      #  LIQUIBASE_URL: jdbc:sqlserver://52.91.17.91:1433;databaseName=liquibaseDemo;encrypt=true;trustServerCertificate=true;
+      #  LIQUIBASE_USERNAME: SA
+      #  LIQUIBASE_PASSWORD: ${{ secrets.SQL_SERVER_PASSWORD }}
+      #        .\lb\liquibase updatesSQL
+      run: |
+        ./lb/liquibase updateSQL
